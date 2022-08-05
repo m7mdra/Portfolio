@@ -1,4 +1,5 @@
-import 'package:flutter_web/material.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import 'package:portfolio/constants/assets.dart';
 import 'package:portfolio/constants/fonts.dart';
 import 'package:portfolio/constants/strings.dart';
@@ -8,7 +9,20 @@ import 'package:portfolio/utils/screen/screen_utils.dart';
 import 'package:portfolio/widgets/responsive_widget.dart';
 import 'dart:html' as html;
 
-class HomePage extends StatelessWidget {
+final kBrandColor = const Color(0xff4d37).withOpacity(1.0);
+
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  var _activePageIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -18,10 +32,28 @@ class HomePage extends StatelessWidget {
             horizontal: (ScreenUtil.getInstance().setWidth(108))), //144
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: _buildAppBar(context),
-          drawer: _buildDrawer(context),
+          appBar: _buildAppBar(
+            context,
+          ),
           body: LayoutBuilder(builder: (context, constraints) {
-            return _buildBody(context, constraints);
+            return Column(
+              children: [
+                Flexible(
+                  child: IndexedStack(
+                    index: _activePageIndex,
+                    children: [
+                      _buildBody(context, constraints),
+                      Container(
+                        color: Colors.red,
+                        constraints: constraints,
+                      ),
+                      Container(color: Colors.blue),
+                    ],
+                  ),
+                ),
+                _buildFooter(context)
+              ],
+            );
           }),
         ),
       ),
@@ -29,14 +61,13 @@ class HomePage extends StatelessWidget {
   }
 
   //AppBar Methods:-------------------------------------------------------------
-  Widget _buildAppBar(BuildContext context) {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
       titleSpacing: 0.0,
       title: _buildTitle(),
       backgroundColor: Colors.transparent,
       elevation: 0.0,
-      actions:
-          !ResponsiveWidget.isSmallScreen(context) ? _buildActions() : null,
+      actions: _buildActions(),
     );
   }
 
@@ -57,7 +88,7 @@ class HomePage extends StatelessWidget {
           TextSpan(
             text: Strings.o,
             style: TextStyles.logo.copyWith(
-              color: Color(0xFF50AFC0),
+              color: kBrandColor,
             ),
           ),
         ],
@@ -71,29 +102,39 @@ class HomePage extends StatelessWidget {
         child: Text(
           Strings.menu_home,
           style: TextStyles.menu_item.copyWith(
-            color: Color(0xFF50AFC0),
+            color: _activePageIndex == 0 ? kBrandColor : null,
           ),
         ),
-        onPressed: () {},
-      ),
-      MaterialButton(
-        child: Text(
-          Strings.menu_about,
-          style: TextStyles.menu_item,
-        ),
-        onPressed: () {},
+        onPressed: () {
+          setState(() => _activePageIndex = 0);
+        },
       ),
       MaterialButton(
         child: Text(
           Strings.menu_contact,
-          style: TextStyles.menu_item,
+          style: TextStyles.menu_item.copyWith(
+            color: _activePageIndex == 1 ? kBrandColor : null,
+          ),
         ),
-        onPressed: () {},
+        onPressed: () {
+          setState(() => _activePageIndex = 1);
+        },
+      ),
+      MaterialButton(
+        child: Text(
+          'Projects',
+          style: TextStyles.menu_item.copyWith(
+            color: _activePageIndex == 2 ? kBrandColor : null,
+          ),
+        ),
+        onPressed: () {
+          setState(() => _activePageIndex = 2);
+        },
       ),
     ];
   }
 
-  Widget _buildDrawer(BuildContext context) {
+  Drawer? _buildDrawer(BuildContext context) {
     return ResponsiveWidget.isSmallScreen(context)
         ? Drawer(
             child: ListView(
@@ -134,7 +175,6 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-          _buildFooter(context)
         ],
       ),
     );
@@ -154,7 +194,6 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-          _buildFooter(context)
         ],
       ),
     );
@@ -166,13 +205,6 @@ class HomePage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Expanded(flex: 1, child: _buildContent(context)),
-          Divider(),
-          _buildCopyRightText(context),
-          SizedBox(
-              height: ResponsiveWidget.isSmallScreen(context) ? 12.0 : 0.0),
-          _buildSocialIcons(),
-          SizedBox(
-              height: ResponsiveWidget.isSmallScreen(context) ? 12.0 : 0.0),
         ],
       ),
     );
@@ -180,10 +212,7 @@ class HomePage extends StatelessWidget {
 
   // Body Methods:--------------------------------------------------------------
   Widget _buildIllustration() {
-    return Image.network(
-      Assets.programmer3,
-      height: ScreenUtil.getInstance().setWidth(345), //480.0
-    );
+    return Container();
   }
 
   Widget _buildContent(BuildContext context) {
@@ -221,7 +250,7 @@ class HomePage extends StatelessWidget {
         // Child text spans will inherit styles from parent
         style: TextStyle(
           fontSize: 14.0,
-          color: Colors.black,
+          color: Color(0xff4d37),
         ),
         children: <TextSpan>[
           TextSpan(
@@ -231,12 +260,13 @@ class HomePage extends StatelessWidget {
               fontSize: ResponsiveWidget.isSmallScreen(context) ? 36 : 45.0,
             ),
           ),
+          TextSpan(text: ' '),
           TextSpan(
-            text: Strings.me,
+            text: '${Strings.me}',
             style: TextStyles.heading.copyWith(
-              color: Color(0xFF50AFC0),
-              fontSize: ResponsiveWidget.isSmallScreen(context) ? 36 : 45.0,
-            ),
+                color: Colors.white,
+                fontSize: ResponsiveWidget.isSmallScreen(context) ? 36 : 45.0,
+                backgroundColor: kBrandColor),
           ),
         ],
       ),
@@ -308,7 +338,12 @@ class HomePage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         _buildSkillsContainerHeading(),
-        Wrap(children: widgets),
+        SizedBox(height: 16),
+        Wrap(
+          children: widgets,
+          spacing: 8,
+          runSpacing: 8,
+        ),
 //        _buildNavigationArrows(),
       ],
     );
@@ -323,9 +358,11 @@ class HomePage extends StatelessWidget {
 
   Widget _buildSkillChip(BuildContext context, String label) {
     return Chip(
+      backgroundColor: Color(0xff4d37).withOpacity(0.2),
       label: Text(
         label,
         style: TextStyles.chip.copyWith(
+          color: Colors.black,
           fontSize: ResponsiveWidget.isSmallScreen(context) ? 10.0 : 11.0,
         ),
       ),
@@ -418,19 +455,13 @@ class HomePage extends StatelessWidget {
       children: <Widget>[
         Divider(),
         Padding(
-          padding: EdgeInsets.all(12.0),
+          padding: EdgeInsets.all(8.0),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Align(
-                child: _buildCopyRightText(context),
-                alignment: Alignment.centerLeft,
-              ),
-              Align(
-                child: _buildSocialIcons(),
-                alignment: Alignment.centerRight,
-              ),
+              Flexible(child: _buildCopyRightText(context)),
+              _buildSocialIcons(),
             ],
           ),
         ),
@@ -439,12 +470,32 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildCopyRightText(BuildContext context) {
-    return Text(
-      Strings.rights_reserved,
-      style: TextStyles.body1.copyWith(
-        fontSize: ResponsiveWidget.isSmallScreen(context) ? 8 : 10.0,
-      ),
-    );
+    return Text.rich(
+        TextSpan(children: [
+          TextSpan(text: 'This is a fork from '),
+          TextSpan(
+              text: 'zubairehman/Portfolio-Demo',
+              style: TextStyle(color: kBrandColor),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  html.window.open(
+                      "https://github.com/zubairehman/Portfolio-Demo",
+                      "zubairehman/Portfolio-Demo");
+                }),
+          TextSpan(text: '\n'),
+          TextSpan(text: 'All the site and its contents are available under '),
+          TextSpan(
+              text: 'CC0',
+              style: TextStyle(color: kBrandColor),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  html.window.open(
+                      "https://creativecommons.org/share-your-work/public-domain/cc0/",
+                      "Creative Commons");
+                }),
+          TextSpan(text: '.')
+        ]),
+        style: TextStyle(fontSize: 10));
   }
 
   Widget _buildSocialIcons() {

@@ -3,7 +3,7 @@
  * email: zhuoyuan93@gmail.com
  */
 
-import 'package:flutter_web/material.dart';
+import 'package:flutter/material.dart';
 
 class ScreenUtil {
   static ScreenUtil instance = new ScreenUtil();
@@ -13,15 +13,15 @@ class ScreenUtil {
   double height;
   bool allowFontScaling;
 
-  static MediaQueryData _mediaQueryData;
-  static double _screenWidth;
-  static double _screenHeight;
-  static double _pixelRatio;
-  static double _statusBarHeight;
+  static late MediaQueryData _mediaQueryData;
+  static late double _screenWidth;
+  static late double _screenHeight;
+  static late double _pixelRatio;
+  static late double _statusBarHeight;
 
-  static double _bottomBarHeight;
+  static late double _bottomBarHeight;
 
-  static double _textScaleFactor;
+  static late double _textScaleFactor;
 
   ScreenUtil({
     this.width = 1080,

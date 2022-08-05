@@ -3,18 +3,20 @@ class Strings {
 
   static const String about_me = 'About Me';
   static const String about = 'About';
-  static const String me = ' Me';
-  static const String portfoli = 'Portfoli';
-  static const String o = 'o';
-  static const String headline = 'I\'am Zubair Rehman, Mobile App Developer from Islamabad, Pakistan';
-  static const String summary = 'Focused professional having excellent technical and communication skills, and offering 6 years of experience in Computer industry. Proficient at designing and formulating test automation frameworks, writing code in various languages, feature development and implementation. Specialize in thinking outside the box to find unique solutions to difficult engineering problems.';
+  static const String me = 'Me';
+  static const String portfoli = 'Mohammed ';
+  static const String o = 'Elshiekh';
+  static const String headline =
+      'I\'am Mohammed Elshiekh, I write code to make screens move';
+  static const String summary =
+      "Experienced and fast learner software engineer with 5 years of experience producing high quality,scalable mobile apps using different platforms and frameworks (Android,iOS,Flutter). I've had the opportunity to work on a couple of projects like On-demand services like delivery and taxi, real-time and map based apps, workforce management, e-commerce, media streaming and logistics.";
   static const String experience = 'Experience';
-  static const String skills_i_have = 'What Skill I Have';
-  static const String rights_reserved = '© 2019 IOTECK SOLUTIONS. ALL RIGHTS RESERVED.';
+  static const String skills_i_have = 'Skills';
+  static const String rights_reserved =
+      'This is a fork from zubairehman/Portfolio-Demo\nAll the blog and its content are available under CC0.';
 
   // menu items
   static const String menu_home = 'Home';
   static const String menu_about = 'About';
   static const String menu_contact = 'Contact';
-
 }

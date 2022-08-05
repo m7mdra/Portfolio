@@ -1,4 +1,4 @@
-import 'package:flutter_web/material.dart';
+import 'package:flutter/material.dart';
 import 'package:portfolio/ui/home.dart';
 
 import 'package:portfolio/utils/screen/screen_utils.dart';
@@ -8,16 +8,12 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          brightness: Brightness.light,
-          primaryColorBrightness: Brightness.light,
-          accentColorBrightness: Brightness.light
+        brightness: Brightness.light,
       ),
       home: MyAppChild(),
     );
@@ -25,7 +21,6 @@ class MyApp extends StatelessWidget {
 }
 
 class MyAppChild extends StatefulWidget {
-
   @override
   _MyAppChildState createState() => _MyAppChildState();
 }
